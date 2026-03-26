@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="cs">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Nahrát produkt — JečnáMERCH</title>
+
+  <link rel="stylesheet" href="/styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Montserrat:wght@600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <div class="brand">
+        <div class="logo">Ječná<span class="accent">MERCH</span></div>
+        <div class="tag">Školní merch — upload</div>
+      </div>
+
+      <nav class="nav">
+        <a href="/" class="nav-link">Domů</a>
+        <a href="/upload" class="nav-link active">Nahrát produkt</a>
+        <a href="/logout" class="nav-link danger">Odhlásit se</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="main-title">
+      <div>
+        <div class="h1">Nahrát nový produkt</div>
+        <div class="subtle">Vyplňte údaje a přidejte obrázek</div>
+      </div>
+    </div>
+
+    <div class="card" style="max-width: 600px; margin: 0 auto;">
+      <form action="/upload" method="POST" enctype="multipart/form-data" class="form" style="display:flex;flex-direction:column;gap:15px;">
+
+        <label>Název produktu:</label>
+        <input type="text" name="name" class="input" required>
+
+        <label>Popis:</label>
+        <textarea name="description" class="input" required></textarea>
+
+        <label>Autor:</label>
+        <input type="text" name="author" class="input" required>
+
+        <label>Cena (Kč):</label>
+        <input type="number" name="price" class="input" required>
+
+        <label>Minimální množství:</label>
+        <input type="number" name="min" class="input" required>
+
+        <label>Obrázek produktu:</label>
+        <input type="file" name="picture" class="input" accept="image/*" required>
+
+        <button type="submit" class="cta" style="margin-top:10px;">Nahrát</button>
+      </form>
+
+      <div style="margin-top: 20px; text-align: center;">
+        <a href="/" class="nav-link">Zpět na katalog</a>
+      </div>
+    </div>
+  </main>
+</body>
+</html>

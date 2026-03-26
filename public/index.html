@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="cs">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>JečnáMERCH — katalog</title>
+
+  <link rel="stylesheet" href="/styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Montserrat:wght@600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <div class="brand">
+        <div class="logo">Ječná<span class="accent">MERCH</span></div>
+        <div class="tag">Školní merch — katalog</div>
+      </div>
+
+      <div class="search-wrap">
+        <input id="search" class="search" placeholder="Hledat..." />
+      </div>
+
+      <nav class="nav">
+        <a href="/" class="nav-link">Domů</a>
+        <a href="/upload" class="nav-link">Nahrát produkt</a>
+        <a href="/logout" class="nav-link danger">Odhlásit se</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="main-title">
+      <div>
+        <div class="h1">Katalog produktů</div>
+        <div class="subtle">Nahrané návrhy z JSON souboru</div>
+      </div>
+      <div class="row">
+        <a href="/upload" class="cta">Nahrát nový produkt</a>
+      </div>
+    </div>
+
+    <div id="catalog" class="grid"></div>
+  </main>
+
+  <script>
+    const searchInput = document.getElementById('search');
+
+    function loadCatalog() {
+      fetch('/catalog')
+        .then(r => r.json())
+        .then(data => {
+          const container = document.getElementById('catalog');
+          container.innerHTML = "";
+
+          const query = searchInput.value.toLowerCase();
+
+          for (const id in data) {
+            const p = data[id];
+
+            if (query && !p.name.toLowerCase().includes(query) && !p.author.toLowerCase().includes(query)) {
+              continue;
+            }
+
+            const card = document.createElement('a');
+            card.className = 'card';
+            card.href = `/product?id=${id}`;
+            card.style.textDecoration = "none";
+            card.style.color = "inherit";
+
+            card.innerHTML = `
+              <div class="card-media">
+                <img src="/pictures/${id}.jpg" alt="obrázek produktu">
+              </div>
+
+              <div class="card-body">
+                <div class="card-title">${p.name}</div>
+                <div class="muted small">Autor: ${p.author}</div>
+
+                <div class="card-meta">
+                  <div class="price">${p.price} Kč</div>
+                </div>
+
+                <div class="vote-wrap">
+                  <div class="progress"><i style="width:${Math.min(100, (p.votes / p['min-amount']) * 100)}%"></i></div>
+                  <div class="vote-info">
+                    <span>${p.votes} / ${p["min-amount"]} hlasů</span>
+                    <span>${Math.round((p.votes / p["min-amount"]) * 100)}%</span>
+                  </div>
+                </div>
+              </div>
+            `;
+
+            container.appendChild(card);
+          }
+        });
+    }
+
+    searchInput.addEventListener('input', loadCatalog);
+    loadCatalog();
+  </script>
+
+</body>
+</html>

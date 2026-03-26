@@ -1,0 +1,29 @@
+const express = require('express');
+const path = require('path');
+const app = express();
+
+// Главная страница /
+app.get('/', (req, res) => {
+  res.send(`
+    <h1>Hello world</h1>
+    <p><a href="/game">Přejít na /game</a></p>
+  `);
+});
+
+// Вторая страница /game
+app.get('/game', (req, res) => {
+  res.send(`
+    <h1>tohle bude stránka s mřížkou</h1>
+    <p><a href="/">Zpět na /</a></p>
+  `);
+});
+
+
+
+// Настройка порта и интерфейса
+const PORT = 8080;
+const HOST = '0.0.0.0';
+
+app.listen(PORT, HOST, () => {
+  console.log(`Server běží na http://${HOST}:${PORT}`);
+});

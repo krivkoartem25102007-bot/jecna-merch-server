@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="cs">
+<head>
+  <meta charset="utf-8" />
+  <title>Detail produktu</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <div class="brand">
+        <div class="logo">Ječná<span class="accent">MERCH</span></div>
+        <div class="tag">Detail produktu</div>
+      </div>
+
+      <nav class="nav">
+        <a href="/" class="nav-link">Domů</a>
+        <a href="/upload" class="nav-link">Nahrát produkt</a>
+        <a href="/logout" class="nav-link danger">Odhlásit se</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <div id="product"></div>
+  </main>
+
+  <script>
+    const id = new URLSearchParams(window.location.search).get("id");
+
+    function loadProduct() {
+      fetch('/catalog')
+        .then(r => r.json())
+        .then(data => {
+          const p = data[id];
+          const box = document.getElementById('product');
+
+          const percent = Math.round((p.votes / p["min-amount"]) * 100);
+
+          box.innerHTML = `
+            <div class="card" style="max-width:700px;margin:auto;">
+              <img class="product-image" src="/pictures/${id}.jpg">
+
+              <div class="card-body">
+                <div class="card-title">${p.name}</div>
+                <div class="muted small">Autor: ${p.author}</div>
+                <p>${p.description}</p>
+
+                <div class="price">${p.price} Kč</div>
+
+                <div class="vote-wrap" style="margin-top:15px;">
+                  <div class="progress"><i style="width:${percent}%"></i></div>
+                  <div class="vote-info">
+                    <span>${p.votes} / ${p["min-amount"]} hlasů</span>
+                    <span>${percent}%</span>
+                  </div>
+                </div>
+
+                <button id="voteBtn" class="cta" style="margin-top:15px;">Hlasovat</button>
+              </div>
+            </div>
+          `;
+
+          document.getElementById("voteBtn").onclick = () => vote();
+        });
+    }
+
+    function vote() {
+      fetch(`/vote/${id}`, { method: "POST" })
+        .then(() => loadProduct());
+    }
+
+    loadProduct();
+  </script>
+</body>
+</html>
